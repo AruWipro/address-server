@@ -3,10 +3,15 @@ const { findDistance } = require('./../utility/FindDistance')
 
 const retrieveOffices = (req, res, next) => {
     console.log(req.body);
-    console.log(typeof req.body);
-    const { latitude, longitude, range } = req.body.request
-    const response = calculateDistanceWithInRange(parseFloat(latitude), parseFloat(longitude), parseFloat(range))
-    res.send(response);
+    const reqBody = req.body
+    if(!reqBody.latitude || !reqBody.longitude || !reqBody.range){
+        res.status(400)
+        res.send({error: 'Invalid request'})
+    }else {
+        const { latitude, longitude, range } = reqBody
+        const response = calculateDistanceWithInRange(parseFloat(latitude), parseFloat(longitude), parseFloat(range))
+        res.send(response);
+    }
 };
 
 const fetchAllOffices = (req, res,) => {
@@ -53,7 +58,7 @@ function flattenResponse(response = []) {
 function transformResponse(request) {
     let response = []
     data.map((org) => {
-        let resData = initResponse();
+        let resData = {addresses: []};
         resData.organization = org.organization;
         resData.website = org.website;
         resData.services = org.services;
@@ -76,24 +81,6 @@ function transformResponse(request) {
 
     const flatResponse = flattenResponse(response);
     return flatResponse;
-}
-
-initAddress = () => {
-    return {
-        city: '',
-        location: '',
-        distance: ''
-    }
-}
-
-
-initResponse = () => {
-    return {
-        organization: '',
-        natureOfWork: '',
-        addresses: [],
-
-    }
 }
 
 module.exports = { retrieveOffices, fetchAllOffices };
