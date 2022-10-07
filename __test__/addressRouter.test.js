@@ -6,31 +6,31 @@ describe('POST address route', ()=>{
         it("Should return 400 for an inValid request", async()=>{
             // Send invalid request
             await supertest(app).post('/api/v1/addresses')
-            .send({
+            .send({request: {
                 "latitude":1.284479,
                 "range": 20
-            })
+            }})
             .expect('Content-Type', /json/)
             .expect(400)
         })
         it("Should return 200 for a valid request", async()=>{
             await supertest(app).post('/api/v1/addresses')
-            .send({
+            .send({request: {
                 "latitude":1.284479,
                 "longitude": 103.75108200000002,
                 "range": 20
-            })
+            }})
             .expect('Content-Type', /json/)
             .expect(200)
         })
 
         it("Should return 200 for a valid request", async()=>{
            const response =  await supertest(app).post('/api/v1/addresses')
-            .send({
+            .send({request:{
                 "latitude":1.284479,
                 "longitude": 103.75108200000002,
                 "range": 20
-            })
+            }})
             expect(response.body).not.toBeNull()
             // Check if address is present in the response
             expect(response.body[0].address).not.toBeNull()

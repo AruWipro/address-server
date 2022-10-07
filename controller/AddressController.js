@@ -10,6 +10,7 @@ const retrieveOffices = (req, res, next) => {
     }else {
         const { latitude, longitude, range } = reqBody
         const response = calculateDistanceWithInRange(parseFloat(latitude), parseFloat(longitude), parseFloat(range))
+        console.log('Respinse is',response);
         res.send(response);
     }
 };
